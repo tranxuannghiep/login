@@ -8,13 +8,13 @@ import {
 import { makeStyles } from "@mui/styles";
 import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fetchThunk } from "./../../common/redux/thunk";
 import { API_PATHS } from "./../../../configs/api";
 import { RESPONSE_STATUS_SUCCESS } from "../../../utils/httpResponseCode";
 import { setUserInfo } from "../redux/authReducer";
 import { getErrorMessageResponse } from "../../../utils";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../redux/reducer";
 import { Action } from "redux";
 import { ThunkDispatch } from "redux-thunk";
@@ -44,7 +44,6 @@ export interface LoginFormProps {}
 export default function LoginForm(props: LoginFormProps) {
   const classes = useStyles();
   const navigate = useNavigate();
-  const { user } = useSelector((state: RootState) => state.authReducer);
   const dispatch =
     useDispatch<ThunkDispatch<RootState, null, Action<string>>>();
   const [loading, setLoading] = useState(false);
@@ -88,53 +87,43 @@ export default function LoginForm(props: LoginFormProps) {
   });
 
   return (
-    <>
-      {user?.id ? (
-        <Navigate to="/" />
-      ) : (
-        <Box className={classes.root}>
-          <form onSubmit={formik.handleSubmit}>
-            <Box className={classes.login}>
-              <img
-                src="https://storage.googleapis.com/hust-files/images/asset-5large_9.3k.png"
-                alt=""
-                style={{
-                  maxWidth: "250px",
-                  margin: "0 auto",
-                  textAlign: "center",
-                  display: "block",
-                }}
-              />
-              {!!errorMessages && (
-                <Typography color="red">{errorMessages}</Typography>
-              )}
+    <Box className={classes.root}>
+      <form onSubmit={formik.handleSubmit}>
+        <Box className={classes.login}>
+          <img
+            src="https://storage.googleapis.com/hust-files/images/asset-5large_9.3k.png"
+            alt=""
+            style={{
+              maxWidth: "250px",
+              margin: "0 auto",
+              textAlign: "center",
+              display: "block",
+            }}
+          />
+          {!!errorMessages && (
+            <Typography color="red">{errorMessages}</Typography>
+          )}
 
-              <InputFiled label="Email" name="email" form={formik} />
-              <PasswordFiled label="Password" name="password" form={formik} />
-              <FormControlLabel
-                style={{ marginTop: "8px" }}
-                control={
-                  <Checkbox
-                    name="rememberMe"
-                    checked={formik.values.rememberMe}
-                    onChange={formik.handleChange}
-                  />
-                }
-                label="Lưu thông tin đăng nhập"
+          <InputFiled label="Email" name="email" form={formik} />
+          <PasswordFiled label="Password" name="password" form={formik} />
+          <FormControlLabel
+            style={{ marginTop: "8px" }}
+            control={
+              <Checkbox
+                name="rememberMe"
+                checked={formik.values.rememberMe}
+                onChange={formik.handleChange}
               />
-              <Box textAlign="center">
-                <LoadingButton
-                  loading={loading}
-                  type="submit"
-                  variant="contained"
-                >
-                  Đăng nhập
-                </LoadingButton>
-              </Box>
-            </Box>
-          </form>
+            }
+            label="Lưu thông tin đăng nhập"
+          />
+          <Box textAlign="center">
+            <LoadingButton loading={loading} type="submit" variant="contained">
+              Đăng nhập
+            </LoadingButton>
+          </Box>
         </Box>
-      )}
-    </>
+      </form>
+    </Box>
   );
 }
