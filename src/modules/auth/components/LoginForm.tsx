@@ -18,10 +18,11 @@ import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../redux/reducer";
 import { Action } from "redux";
 import { ThunkDispatch } from "redux-thunk";
-import * as yup from "yup";
+// import * as yup from "yup";
 import { useFormik } from "formik";
 import InputFiled from "../../../components/form-controls/InputFiled";
 import PasswordFiled from "../../../components/form-controls/PasswordFiled";
+import { validateLogin, validLogin } from "../utils";
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     display: "flex",
@@ -32,7 +33,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: "0 auto",
   },
   login: {
-    // border: "1px solid #ddd",
     padding: "20px",
     "&  .MuiFormHelperText-root": {
       fontSize: "16px",
@@ -48,23 +48,33 @@ export default function LoginForm(props: LoginFormProps) {
     useDispatch<ThunkDispatch<RootState, null, Action<string>>>();
   const [loading, setLoading] = useState(false);
   const [errorMessages, setErrorMessages] = useState("");
-  const validationSchema = yup.object({
-    email: yup
-      .string()
-      .email("Enter a valid email")
-      .required("Email is required"),
-    password: yup
-      .string()
-      .min(4, "Password should be of minimum 8 characters length")
-      .required("Password is required"),
-  });
+  // const validationSchema = yup.object({
+  //   email: yup
+  //     .string()
+  //     .email("Enter a valid email")
+  //     .required("Email is required"),
+  //   password: yup
+  //     .string()
+  //     .min(4, "Password should be of minimum 8 characters length")
+  //     .required("Password is required"),
+  // });
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
       rememberMe: false,
     },
-    validationSchema: validationSchema,
+    // validate chạy = yup
+    // validationSchema: validationSchema,
+    // validate chạy = cơm
+    validate: (values) => {
+      const validate = validateLogin(values);
+      if (validLogin(validate)) {
+        return;
+      }
+      return validate;
+    },
+
     onSubmit: async (formValues) => {
       setLoading(true);
       const res = await dispatch(
