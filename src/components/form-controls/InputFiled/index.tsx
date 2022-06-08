@@ -1,9 +1,10 @@
 import { TextField } from "@mui/material";
+import { FormikValues } from "formik";
 
 export interface InputFiledProps {
   label: string;
   name: string;
-  form: any;
+  form: FormikValues;
 }
 
 export default function InputFiled(props: InputFiledProps) {

@@ -7,12 +7,13 @@ import {
   InputLabel,
   OutlinedInput,
 } from "@mui/material";
+import { FormikValues } from "formik";
 import { useState } from "react";
 
 export interface PasswordFiledProps {
   label: string;
   name: string;
-  form: any;
+  form: FormikValues;
 }
 
 export default function PasswordFiled(props: PasswordFiledProps) {
