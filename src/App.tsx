@@ -6,6 +6,7 @@ import { setUserInfo } from "./modules/auth/redux/authReducer";
 import store from "./redux/configureStore";
 import HeaderComponent from "./layout/HeaderComponent";
 import PrivateRoute from "./private/PrivateRoute";
+import RegisterPage from "./modules/auth/pages/RegisterPage";
 
 const userLocal = localStorage.getItem("user");
 if (userLocal !== null) store.dispatch(setUserInfo(JSON.parse(userLocal)));
@@ -23,6 +24,7 @@ function App() {
           }
         />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
     </>
   );

@@ -27,7 +27,7 @@ export default function PasswordFiled(props: PasswordFiledProps) {
       margin="normal"
       error={form.touched[name] && Boolean(form.errors[name])}
     >
-      <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+      <InputLabel htmlFor="standard-adornment-password">{label}</InputLabel>
       <OutlinedInput
         id="standard-adornment-password"
         type={showPassword ? "text" : "password"}

@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Checkbox,
   FormControlLabel,
   Theme,
@@ -101,7 +102,7 @@ export default function LoginForm(props: LoginFormProps) {
       <form onSubmit={formik.handleSubmit}>
         <Box className={classes.login}>
           <img
-            src="https://storage.googleapis.com/hust-files/images/asset-5large_9.3k.png"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_Tcj3W5LZYlioIj5o9yXL0fHeYrcBstH98OOPxWqnsmdzUZgLNVkrAKdP92zLEftSXoU&usqp=CAU"
             alt=""
             style={{
               maxWidth: "250px",
@@ -131,6 +132,11 @@ export default function LoginForm(props: LoginFormProps) {
             <LoadingButton loading={loading} type="submit" variant="contained">
               Đăng nhập
             </LoadingButton>
+          </Box>
+          <Box textAlign="center" mt={2}>
+            <Button onClick={() => navigate("/register")}>
+              Bạn chưa có tài khoản. Đăng kí ngay !
+            </Button>
           </Box>
         </Box>
       </form>
