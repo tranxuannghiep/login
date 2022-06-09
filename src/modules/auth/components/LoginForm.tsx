@@ -24,6 +24,7 @@ import { useFormik } from "formik";
 import InputFiled from "../../../components/form-controls/InputFiled";
 import PasswordFiled from "../../../components/form-controls/PasswordFiled";
 import { validateLogin, validLogin } from "../utils";
+import { ILoginParams } from "./../../../models/auth";
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     display: "flex",
@@ -68,7 +69,7 @@ export default function LoginForm(props: LoginFormProps) {
     // validate chạy = yup
     // validationSchema: validationSchema,
     // validate chạy = cơm
-    validate: (values) => {
+    validate: (values: ILoginParams) => {
       const validate = validateLogin(values);
       if (validLogin(validate)) {
         return;
@@ -76,7 +77,7 @@ export default function LoginForm(props: LoginFormProps) {
       return validate;
     },
 
-    onSubmit: async (formValues) => {
+    onSubmit: async (formValues: ILoginParams) => {
       setLoading(true);
       const res = await dispatch(
         fetchThunk(API_PATHS.signIn, "post", {

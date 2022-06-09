@@ -1,11 +1,23 @@
-import { Box, Button, Theme } from "@mui/material";
-import InputFiled from "../../../components/form-controls/InputFiled";
 import { LoadingButton } from "@mui/lab";
+import { Box, Button, Theme, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Action } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 import * as yup from "yup";
+import AsyncSelectFiled from "../../../components/form-controls/AsyncSelectFiled/AsyncSelectFiled";
+import InputFiled from "../../../components/form-controls/InputFiled";
 import PasswordFiled from "../../../components/form-controls/PasswordFiled";
+import SelectFiled from "../../../components/form-controls/SelectFiled/SelectFiled";
+import { RootState } from "../../../redux/reducer";
+import { getErrorMessageResponse } from "../../../utils";
+import { API_PATHS } from "./../../../configs/api";
+import { ILocationParams, ISignUpParams } from "./../../../models/auth";
+import { RESPONSE_STATUS_SUCCESS } from "./../../../utils/httpResponseCode";
+import { fetchThunk } from "./../../common/redux/thunk";
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     display: "flex",
@@ -27,6 +39,28 @@ export interface RegisterFormProps {}
 export default function RegisterForm(props: RegisterFormProps) {
   const classes = useStyles();
   const navigate = useNavigate();
+  const dispatch =
+    useDispatch<ThunkDispatch<RootState, null, Action<string>>>();
+  const [regionList, setRegionList] = useState<ILocationParams[]>([]);
+  const [stateList, setSateList] = useState<ILocationParams[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [errorMessages, setErrorMessages] = useState("");
+
+  const onChangeId = useCallback(
+    (id: number) => {
+      const getLocationById = async () => {
+        const json = await dispatch(
+          fetchThunk(API_PATHS.getLocationByPid(id), "get")
+        );
+        if (json?.code === RESPONSE_STATUS_SUCCESS) {
+          setSateList(json.data);
+          return;
+        }
+      };
+      getLocationById();
+    },
+    [dispatch]
+  );
   const validationSchema = yup.object({
     email: yup
       .string()
@@ -50,6 +84,8 @@ export default function RegisterForm(props: RegisterFormProps) {
           return value.split(" ").length >= 2;
         }
       ),
+    gender: yup.string().required("Gender is required"),
+    region: yup.string().required("Region is required"),
   });
   const formik = useFormik({
     initialValues: {
@@ -57,12 +93,38 @@ export default function RegisterForm(props: RegisterFormProps) {
       password: "",
       repeatPassword: "",
       name: "",
+      gender: "",
+      region: "",
+      state: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (formValues) => {
-      console.log(formValues);
+    onSubmit: async (formValues: ISignUpParams) => {
+      setErrorMessages("");
+      setLoading(true);
+      const res = await dispatch(
+        fetchThunk(API_PATHS.signUp, "post", formValues)
+      );
+      setLoading(false);
+      if (res?.code === RESPONSE_STATUS_SUCCESS) {
+        alert("Chúc mừng bạn đã đăng ký thành công");
+
+        navigate("/login");
+        return;
+      }
+      setErrorMessages(getErrorMessageResponse(res));
     },
   });
+  const getLocation = useCallback(async () => {
+    const json = await dispatch(fetchThunk(API_PATHS.getLocation, "get"));
+    if (json?.code === RESPONSE_STATUS_SUCCESS) {
+      setRegionList(json.data);
+      return;
+    }
+  }, [dispatch]);
+  useEffect(() => {
+    getLocation();
+  }, [getLocation]);
+
   return (
     <Box className={classes.root}>
       <form onSubmit={formik.handleSubmit}>
@@ -77,9 +139,9 @@ export default function RegisterForm(props: RegisterFormProps) {
               display: "block",
             }}
           />
-          {/* {!!errorMessages && (
+          {!!errorMessages && (
             <Typography color="red">{errorMessages}</Typography>
-          )} */}
+          )}
 
           <InputFiled label="Địa chỉ Email" name="email" form={formik} />
           <PasswordFiled label="Mật khẩu" name="password" form={formik} />
@@ -89,9 +151,22 @@ export default function RegisterForm(props: RegisterFormProps) {
             form={formik}
           />
           <InputFiled label="Họ và tên" name="name" form={formik} />
-
+          <SelectFiled label="Giới tính" name="gender" form={formik} />
+          <AsyncSelectFiled
+            label="Quốc gia"
+            name="region"
+            form={formik}
+            items={regionList}
+            onChangeId={onChangeId}
+          />
+          <AsyncSelectFiled
+            label="Thành phố"
+            name="state"
+            form={formik}
+            items={stateList}
+          />
           <Box textAlign="center">
-            <LoadingButton type="submit" variant="contained">
+            <LoadingButton loading={loading} type="submit" variant="contained">
               Đăng ký
             </LoadingButton>
           </Box>
