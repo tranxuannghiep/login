@@ -10,27 +10,29 @@ import { makeStyles } from "@mui/styles";
 import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { fetchThunk } from "./../../common/redux/thunk";
-import { API_PATHS } from "./../../../configs/api";
-import { RESPONSE_STATUS_SUCCESS } from "../../../utils/httpResponseCode";
-import { setUserInfo } from "../redux/authReducer";
-import { getErrorMessageResponse } from "../../../utils";
+
 import { useNavigate } from "react-router-dom";
-import { RootState } from "../../../redux/reducer";
 import { Action } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 // import * as yup from "yup";
 import { useFormik } from "formik";
-import InputFiled from "../../../components/form-controls/InputFiled";
-import PasswordFiled from "../../../components/form-controls/PasswordFiled";
+import { ILoginParams } from "models/auth";
 import { validateLogin, validLogin } from "../utils";
-import { ILoginParams } from "./../../../models/auth";
+import { fetchThunk } from "modules/common/redux/thunk";
+import { API_PATHS } from "configs/api";
+import { RESPONSE_STATUS_SUCCESS } from "utils/httpResponseCode";
+import { setUserInfo } from "../redux/authReducer";
+import { getErrorMessageResponse } from "utils";
+import InputFiled from "components/form-controls/InputFiled";
+import PasswordFiled from "components/form-controls/PasswordFiled";
+import { RootState } from "redux/reducer";
+
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: "100vh",
+    minHeight: "100vh",
     maxWidth: "600px",
     margin: "0 auto",
   },

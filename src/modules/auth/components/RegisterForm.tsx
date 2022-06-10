@@ -1,29 +1,30 @@
 import { LoadingButton } from "@mui/lab";
 import { Box, Button, Theme, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import AsyncSelectFiled from "components/form-controls/AsyncSelectFiled/AsyncSelectFiled";
+import InputFiled from "components/form-controls/InputFiled";
+import PasswordFiled from "components/form-controls/PasswordFiled";
+import SelectFiled from "components/form-controls/SelectFiled/SelectFiled";
+import { API_PATHS } from "configs/api";
 import { useFormik } from "formik";
+import { ILocationParams, ISignUpParams } from "models/auth";
+import { fetchThunk } from "modules/common/redux/thunk";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Action } from "redux";
 import { ThunkDispatch } from "redux-thunk";
+import { RootState } from "redux/reducer";
+import { getErrorMessageResponse } from "utils";
+import { RESPONSE_STATUS_SUCCESS } from "utils/httpResponseCode";
 import * as yup from "yup";
-import AsyncSelectFiled from "../../../components/form-controls/AsyncSelectFiled/AsyncSelectFiled";
-import InputFiled from "../../../components/form-controls/InputFiled";
-import PasswordFiled from "../../../components/form-controls/PasswordFiled";
-import SelectFiled from "../../../components/form-controls/SelectFiled/SelectFiled";
-import { RootState } from "../../../redux/reducer";
-import { getErrorMessageResponse } from "../../../utils";
-import { API_PATHS } from "./../../../configs/api";
-import { ILocationParams, ISignUpParams } from "./../../../models/auth";
-import { RESPONSE_STATUS_SUCCESS } from "./../../../utils/httpResponseCode";
-import { fetchThunk } from "./../../common/redux/thunk";
+
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: "100vh",
+    minHeight: "100vh",
     maxWidth: "600px",
     margin: "0 auto",
   },

@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { RootState } from "../../../redux/reducer";
+import { RootState } from "redux/reducer";
 import LoginForm from "../components/LoginForm";
 export interface LoginPageProps {}
 

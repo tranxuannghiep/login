@@ -1,8 +1,8 @@
 import { FormControl, FormHelperText, TextField } from "@mui/material";
 import { FormikValues } from "formik";
 import * as React from "react";
-import { ILocationParams } from "./../../../models/auth";
 import Autocomplete from "@mui/material/Autocomplete";
+import { ILocationParams } from "models/auth";
 
 export interface SelectFiledProps {
   label: string;
@@ -12,7 +12,7 @@ export interface SelectFiledProps {
   onChangeId?: Function;
 }
 
-export default function SelectFiled(props: SelectFiledProps) {
+export default function AsyncSelectFiled(props: SelectFiledProps) {
   const { label, name, form, items = [], onChangeId } = props;
 
   return (
