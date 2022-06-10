@@ -1,11 +1,6 @@
-import { Box } from "@mui/material";
+import * as React from "react";
+import Box from "@mui/material/Box";
 
-export interface HomePageProps {}
-
-export default function HomePage(props: HomePageProps) {
-  return (
-    <Box textAlign="center" mt={5}>
-      HomePage
-    </Box>
-  );
+export default function HomePage() {
+  return <Box>HomePage</Box>;
 }

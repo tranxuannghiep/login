@@ -49,6 +49,7 @@ export default function RegisterForm(props: RegisterFormProps) {
   const onChangeId = useCallback(
     (id: number) => {
       const getLocationById = async () => {
+        // await setSateList([]);
         const json = await dispatch(
           fetchThunk(API_PATHS.getLocationByPid(id), "get")
         );
@@ -159,12 +160,14 @@ export default function RegisterForm(props: RegisterFormProps) {
             items={regionList}
             onChangeId={onChangeId}
           />
+
           <AsyncSelectFiled
             label="Thành phố"
             name="state"
             form={formik}
             items={stateList}
           />
+
           <Box textAlign="center">
             <LoadingButton loading={loading} type="submit" variant="contained">
               Đăng ký
