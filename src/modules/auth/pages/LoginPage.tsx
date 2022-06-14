@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import { ROUTES } from "configs/routes";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
@@ -11,7 +12,7 @@ export default function LoginPage(props: LoginPageProps) {
   return (
     <>
       {user?.id ? (
-        <Navigate to="/" />
+        <Navigate to={ROUTES.home} />
       ) : (
         <Box>
           <LoginForm />

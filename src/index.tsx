@@ -6,15 +6,22 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/configureStore";
+import ConnectedIntlProvider from "modules/intl/component/ConnectedIntlProvider";
+import { setLocale } from "modules/intl/redux/intlReducer";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
+store.dispatch(setLocale("vi"));
+
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
-        <App />
+        <ConnectedIntlProvider>
+          <App />
+        </ConnectedIntlProvider>
       </Provider>
     </BrowserRouter>
   </React.StrictMode>

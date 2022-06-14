@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import { FormikValues } from "formik";
 import * as React from "react";
+import { FormattedMessage } from "react-intl";
 
 export interface SelectFiledProps {
   label: string;
@@ -44,7 +45,11 @@ export default function SelectFiled(props: SelectFiledProps) {
         <MenuItem value="male">Nam</MenuItem>
         <MenuItem value="female">Nữ</MenuItem>
       </Select>
-      <FormHelperText>{form.touched[name] && form.errors[name]}</FormHelperText>
+      <FormHelperText>
+        {form.touched[name] && form.errors[name] && (
+          <FormattedMessage id={form.touched[name] && form.errors[name]} />
+        )}
+      </FormHelperText>
     </FormControl>
   );
 }

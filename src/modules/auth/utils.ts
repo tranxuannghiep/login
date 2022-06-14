@@ -3,11 +3,11 @@ import { validEmailRegex } from "../../utils";
 
 const validateEmail = (email: string) => {
   if (!email) {
-    return "Vui lòng nhập địa chỉ email";
+    return "emailRequire";
   }
 
   if (!validEmailRegex.test(email)) {
-    return "Địa chỉ email không hợp lệ";
+    return "emailInvalid";
   }
 
   return "";
@@ -15,11 +15,11 @@ const validateEmail = (email: string) => {
 
 const validatePassword = (password: string) => {
   if (!password) {
-    return "Vui lòng nhập mật khẩu";
+    return "passwordRequire";
   }
 
   if (password.length < 4) {
-    return "Mật khẩu tối thiểu 4 ký tự";
+    return "minPasswordInvalid";
   }
 
   return "";

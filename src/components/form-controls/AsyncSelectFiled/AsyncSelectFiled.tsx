@@ -3,6 +3,7 @@ import { FormikValues } from "formik";
 import * as React from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import { ILocationParams } from "models/auth";
+import { FormattedMessage } from "react-intl";
 
 export interface SelectFiledProps {
   label: string;
@@ -24,9 +25,14 @@ export default function AsyncSelectFiled(props: SelectFiledProps) {
       <Autocomplete
         options={items}
         getOptionLabel={(option) => option.name}
-        renderInput={(params) => <TextField {...params} label={label} />}
+        renderInput={(params) => (
+          <TextField
+            error={form.touched[name] && Boolean(form.errors[name])}
+            {...params}
+            label={label}
+          />
+        )}
         disableClearable
-        // clearText=""
         value={
           items.find((val) => val.id === form.values[name]) || {
             id: "",
@@ -36,12 +42,15 @@ export default function AsyncSelectFiled(props: SelectFiledProps) {
         }
         onChange={(_, value) => {
           if (onChangeId) onChangeId(value.id);
-
           return form.setFieldValue(name, value.id);
         }}
       />
 
-      <FormHelperText>{form.touched[name] && form.errors[name]}</FormHelperText>
+      <FormHelperText>
+        {form.touched[name] && form.errors[name] && (
+          <FormattedMessage id={form.touched[name] && form.errors[name]} />
+        )}
+      </FormHelperText>
     </FormControl>
   );
 }

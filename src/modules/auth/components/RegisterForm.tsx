@@ -6,10 +6,12 @@ import InputFiled from "components/form-controls/InputFiled";
 import PasswordFiled from "components/form-controls/PasswordFiled";
 import SelectFiled from "components/form-controls/SelectFiled/SelectFiled";
 import { API_PATHS } from "configs/api";
+import { ROUTES } from "configs/routes";
 import { useFormik } from "formik";
 import { ILocationParams, ISignUpParams } from "models/auth";
 import { fetchThunk } from "modules/common/redux/thunk";
 import { useCallback, useEffect, useState } from "react";
+import { FormattedMessage } from "react-intl";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Action } from "redux";
@@ -17,7 +19,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "redux/reducer";
 import { getErrorMessageResponse } from "utils";
 import { RESPONSE_STATUS_SUCCESS } from "utils/httpResponseCode";
-import * as yup from "yup";
+import { validationRegisterSchema } from "utils/validate.util";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -50,7 +52,6 @@ export default function RegisterForm(props: RegisterFormProps) {
   const onChangeId = useCallback(
     (id: number) => {
       const getLocationById = async () => {
-        // await setSateList([]);
         const json = await dispatch(
           fetchThunk(API_PATHS.getLocationByPid(id), "get")
         );
@@ -63,32 +64,7 @@ export default function RegisterForm(props: RegisterFormProps) {
     },
     [dispatch]
   );
-  const validationSchema = yup.object({
-    email: yup
-      .string()
-      .email("Enter a valid email")
-      .required("Email is required"),
-    password: yup
-      .string()
-      .min(4, "Password should be of minimum 4 characters length")
-      .required("Password is required"),
-    repeatPassword: yup
-      .string()
-      .required("RepeatPassword is required")
-      .oneOf([yup.ref("password")], "Password does not match"),
-    name: yup
-      .string()
-      .required("Name is required")
-      .test(
-        "should has at least two words",
-        "Please enter at least two words",
-        (value = "") => {
-          return value.split(" ").length >= 2;
-        }
-      ),
-    gender: yup.string().required("Gender is required"),
-    region: yup.string().required("Region is required"),
-  });
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -99,7 +75,7 @@ export default function RegisterForm(props: RegisterFormProps) {
       region: "",
       state: "",
     },
-    validationSchema: validationSchema,
+    validationSchema: validationRegisterSchema,
     onSubmit: async (formValues: ISignUpParams) => {
       setErrorMessages("");
       setLoading(true);
@@ -110,7 +86,7 @@ export default function RegisterForm(props: RegisterFormProps) {
       if (res?.code === RESPONSE_STATUS_SUCCESS) {
         alert("Chúc mừng bạn đã đăng ký thành công");
 
-        navigate("/login");
+        navigate(ROUTES.login);
         return;
       }
       setErrorMessages(getErrorMessageResponse(res));
@@ -142,7 +118,9 @@ export default function RegisterForm(props: RegisterFormProps) {
             }}
           />
           {!!errorMessages && (
-            <Typography color="red">{errorMessages}</Typography>
+            <Typography color="red">
+              <FormattedMessage id={errorMessages} />
+            </Typography>
           )}
 
           <InputFiled label="Địa chỉ Email" name="email" form={formik} />
@@ -171,12 +149,12 @@ export default function RegisterForm(props: RegisterFormProps) {
 
           <Box textAlign="center">
             <LoadingButton loading={loading} type="submit" variant="contained">
-              Đăng ký
+              <FormattedMessage id="register" />
             </LoadingButton>
           </Box>
           <Box textAlign="center" mt={2}>
-            <Button onClick={() => navigate("/login")}>
-              Bạn đã có tài khoản. Đăng nhập ngay !
+            <Button onClick={() => navigate(ROUTES.login)}>
+              <FormattedMessage id="loginNow" />
             </Button>
           </Box>
         </Box>

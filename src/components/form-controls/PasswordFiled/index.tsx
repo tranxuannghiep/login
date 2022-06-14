@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { FormikValues } from "formik";
 import { useState } from "react";
+import { FormattedMessage } from "react-intl";
 
 export interface PasswordFiledProps {
   label: string;
@@ -49,7 +50,11 @@ export default function PasswordFiled(props: PasswordFiledProps) {
           </InputAdornment>
         }
       />
-      <FormHelperText>{form.touched[name] && form.errors[name]}</FormHelperText>
+      <FormHelperText>
+        {form.touched[name] && form.errors[name] && (
+          <FormattedMessage id={form.touched[name] && form.errors[name]} />
+        )}
+      </FormHelperText>
     </FormControl>
   );
 }

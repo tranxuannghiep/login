@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { RootState } from "../redux/reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUserInfo } from "../modules/auth/redux/authReducer";
+import { FormattedMessage } from "react-intl";
 
 export interface HeaderComponentProps {}
 
@@ -44,7 +45,11 @@ export default function HeaderComponent(props: HeaderComponentProps) {
                 : () => navigate("/login")
             }
           >
-            {user?.id ? "Logout" : "Login"}
+            {user?.id ? (
+              <FormattedMessage id="logout" />
+            ) : (
+              <FormattedMessage id="login" />
+            )}
           </Button>
         </Toolbar>
       </AppBar>

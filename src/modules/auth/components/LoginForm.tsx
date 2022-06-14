@@ -26,6 +26,8 @@ import { getErrorMessageResponse } from "utils";
 import InputFiled from "components/form-controls/InputFiled";
 import PasswordFiled from "components/form-controls/PasswordFiled";
 import { RootState } from "redux/reducer";
+import { ROUTES } from "configs/routes";
+import { FormattedMessage } from "react-intl";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -93,7 +95,7 @@ export default function LoginForm(props: LoginFormProps) {
         if (formValues.rememberMe)
           localStorage.setItem("user", JSON.stringify(res.data));
         else localStorage.removeItem("user");
-        navigate("/", { replace: true });
+        navigate(ROUTES.home, { replace: true });
         return;
       }
       setErrorMessages(getErrorMessageResponse(res));
@@ -115,7 +117,9 @@ export default function LoginForm(props: LoginFormProps) {
             }}
           />
           {!!errorMessages && (
-            <Typography color="red">{errorMessages}</Typography>
+            <Typography color="red">
+              <FormattedMessage id={errorMessages} />
+            </Typography>
           )}
 
           <InputFiled label="Email" name="email" form={formik} />
@@ -133,12 +137,12 @@ export default function LoginForm(props: LoginFormProps) {
           />
           <Box textAlign="center">
             <LoadingButton loading={loading} type="submit" variant="contained">
-              Đăng nhập
+              <FormattedMessage id="login" />
             </LoadingButton>
           </Box>
           <Box textAlign="center" mt={2}>
-            <Button onClick={() => navigate("/register")}>
-              Bạn chưa có tài khoản. Đăng kí ngay !
+            <Button onClick={() => navigate(ROUTES.register)}>
+              <FormattedMessage id="registerNow" />
             </Button>
           </Box>
         </Box>
