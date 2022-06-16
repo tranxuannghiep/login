@@ -1,0 +1,8 @@
+@import "themes/media";
+#TodoSkeleton {
+  .title {
+    @include xs {
+      margin-top: 20px;
+    }
+  }
+}

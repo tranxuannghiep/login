@@ -1,0 +1,12 @@
+@import "themes/media";
+#InputTodo {
+  @include xs {
+    height: calc(1em * 1.5 * 4);
+  }
+  @include sm {
+    height: calc(1em * 1.5 * 4);
+  }
+  @include md {
+    height: calc(1em * 1.5 * 3);
+  }
+}

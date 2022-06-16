@@ -7,6 +7,7 @@ import store from "./redux/configureStore";
 import HeaderComponent from "./layout/HeaderComponent";
 import PrivateRoute from "./private/PrivateRoute";
 import RegisterPage from "./modules/auth/pages/RegisterPage";
+import TodoPage from "modules/todos/pages";
 
 const userLocal = localStorage.getItem("user");
 if (userLocal !== null) store.dispatch(setUserInfo(JSON.parse(userLocal)));
@@ -25,6 +26,14 @@ function App() {
         />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/todo"
+          element={
+            <PrivateRoute>
+              <TodoPage />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </>
   );

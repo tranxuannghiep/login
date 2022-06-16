@@ -1,0 +1,18 @@
+@import "themes/media";
+#Todo {
+  text-align: center !important;
+  .todo-img {
+    img {
+      width: 150px;
+      height: 150p;
+      margin: 0 auto;
+      display: block;
+    }
+  }
+  .title {
+    text-align: left;
+    @include xs {
+      margin-top: 20px;
+    }
+  }
+}
