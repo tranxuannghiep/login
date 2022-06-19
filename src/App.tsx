@@ -8,6 +8,7 @@ import HeaderComponent from "./layout/HeaderComponent";
 import PrivateRoute from "./private/PrivateRoute";
 import RegisterPage from "./modules/auth/pages/RegisterPage";
 import TodoPage from "modules/todos/pages";
+import DataTablePage from "modules/dataTable/pages/DataTablePage";
 
 const userLocal = localStorage.getItem("user");
 if (userLocal !== null) store.dispatch(setUserInfo(JSON.parse(userLocal)));
@@ -31,6 +32,14 @@ function App() {
           element={
             <PrivateRoute>
               <TodoPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/data-table"
+          element={
+            <PrivateRoute>
+              <DataTablePage />
             </PrivateRoute>
           }
         />

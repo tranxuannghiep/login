@@ -6,9 +6,18 @@ import { ROUTES } from "configs/routes";
 export default function HomePage() {
   const navigate = useNavigate();
   return (
-    <Box textAlign="center" mt={5}>
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="space-between"
+      width="250px"
+      margin="40px auto"
+    >
       <Button variant="contained" onClick={() => navigate(ROUTES.todo)}>
         Todo
+      </Button>
+      <Button variant="contained" onClick={() => navigate(ROUTES.dataTable)}>
+        PayRoll
       </Button>
     </Box>
   );
