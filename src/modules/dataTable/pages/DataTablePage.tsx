@@ -27,10 +27,18 @@ export default function DataTablePage(props: DataTablePageProps) {
     ]);
     dispatch(getPayrolls(data));
     dispatch(getCurrencies(currencies));
-    setPagination((prev: any) => ({
-      ...prev,
-      total,
-    }));
+    if (Math.ceil(total / pagination.limit) < pagination.page) {
+      setPagination((prev: any) => ({
+        ...prev,
+        total,
+        page: 1,
+      }));
+    } else {
+      setPagination((prev: any) => ({
+        ...prev,
+        total,
+      }));
+    }
     setLoading(false);
   }, [pagination.page, dispatch, filter, pagination.limit]);
   useEffect(() => {

@@ -1,8 +1,8 @@
 import * as React from "react";
 import "./TableComponent.scss";
 import { Box } from "@mui/material";
-import TdTable from "modules/common/components/TdTable";
-import TdTableSkeleton from "modules/common/components/TdTableSkeleton";
+import TdTable from "modules/dataTable/common/components/TdTable";
+import TdTableSkeleton from "modules/dataTable/common/components/TdTableSkeleton";
 import { useSelector } from "react-redux";
 import { RootState } from "redux/reducer";
 
