@@ -2,6 +2,8 @@
 import { ActionType, createCustomAction, getType } from "typesafe-actions";
 
 export interface FilterTableState {
+  page: number;
+  limit: number;
   status?: string;
   timeFrom?: string;
   timeTo?: string;
@@ -23,7 +25,7 @@ export interface PayRolls {
 
 export interface DataTableState {
   payrolls: PayRolls[];
-  filter: FilterTableState;
+  // filter: FilterTableState;
   currencies: string[];
 }
 export const getPayrolls = createCustomAction(
@@ -32,12 +34,7 @@ export const getPayrolls = createCustomAction(
     data,
   })
 );
-export const filterPayrolls = createCustomAction(
-  "dataTable/filterPayrolls",
-  (data: FilterTableState) => ({
-    data,
-  })
-);
+
 export const deletePayroll = createCustomAction(
   "dataTable/deletePayroll",
   (id: string) => ({
@@ -61,7 +58,6 @@ export const getCurrencies = createCustomAction(
 
 const actions = {
   getPayrolls,
-  filterPayrolls,
   deletePayroll,
   updatePayroll,
   getCurrencies,
@@ -71,7 +67,6 @@ type Action = ActionType<typeof actions>;
 export default function dataTableReducer(
   state: DataTableState = {
     payrolls: [],
-    filter: {},
     currencies: [],
   },
   action: Action
@@ -79,11 +74,6 @@ export default function dataTableReducer(
   switch (action.type) {
     case getType(getPayrolls):
       return { ...state, payrolls: action.data };
-    case getType(filterPayrolls):
-      return {
-        ...state,
-        filter: action.data,
-      };
     case getType(deletePayroll):
       const idx = state.payrolls.findIndex(
         (payroll) => payroll.payroll_id === action.id

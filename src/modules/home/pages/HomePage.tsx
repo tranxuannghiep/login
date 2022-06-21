@@ -10,7 +10,7 @@ export default function HomePage() {
       display="flex"
       alignItems="center"
       justifyContent="space-between"
-      width="250px"
+      width="500px"
       margin="40px auto"
     >
       <Button variant="contained" onClick={() => navigate(ROUTES.todo)}>
@@ -18,6 +18,9 @@ export default function HomePage() {
       </Button>
       <Button variant="contained" onClick={() => navigate(ROUTES.dataTable)}>
         PayRoll
+      </Button>
+      <Button variant="contained" onClick={() => navigate(ROUTES.profile)}>
+        Profile
       </Button>
     </Box>
   );

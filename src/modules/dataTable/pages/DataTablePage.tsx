@@ -1,17 +1,33 @@
 import TableComponent from "../components/TableComponent/TableComponent";
 import { Box, Container, Pagination, Typography } from "@mui/material";
 import FilterComponent from "../components/FilterComponent/FilterComponent";
-import { useCallback, useEffect, useState } from "react";
-import { getAll, getCurrency, getTotal } from "../api/dataTable";
-import { useDispatch, useSelector } from "react-redux";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { getAll, getCurrency } from "../api/dataTable";
+import { useDispatch } from "react-redux";
 import { getCurrencies, getPayrolls } from "../redux/dataTableReducer";
-import { RootState } from "redux/reducer";
+import queryString from "query-string";
+import { useQuery } from "hooks/useQuery";
+import { useLocation } from "react-router-dom";
 
 export interface DataTablePageProps {}
 
 export default function DataTablePage(props: DataTablePageProps) {
   const dispatch = useDispatch();
-  const { filter } = useSelector((state: RootState) => state.dataTableReducer);
+  const [, setQuery] = useQuery();
+  const location = useLocation();
+
+  const queryParams = useMemo(() => {
+    const params = queryString.parse(location.search);
+
+    return {
+      ...params,
+      page: Number(params.page) || 1,
+      limit: Number(params.limit) || 10,
+    };
+  }, [location.search]);
+  const handleFiltersChange = (newFilters: any) => {
+    setQuery(newFilters);
+  };
   const [pagination, setPagination] = useState<any>({
     page: 1,
     limit: 10,
@@ -20,27 +36,15 @@ export default function DataTablePage(props: DataTablePageProps) {
   const [loading, setLoading] = useState(false);
   const getData = useCallback(async () => {
     setLoading(true);
-    const [data, total, currencies]: any[] = await Promise.all([
-      getAll(pagination.page, pagination.limit, filter),
-      getTotal(filter),
+    const [{ data, pagination }, currencies]: any[] = await Promise.all([
+      getAll(queryParams as any),
       getCurrency(),
     ]);
     dispatch(getPayrolls(data));
     dispatch(getCurrencies(currencies));
-    if (Math.ceil(total / pagination.limit) < pagination.page) {
-      setPagination((prev: any) => ({
-        ...prev,
-        total,
-        page: 1,
-      }));
-    } else {
-      setPagination((prev: any) => ({
-        ...prev,
-        total,
-      }));
-    }
+    setPagination(pagination);
     setLoading(false);
-  }, [pagination.page, dispatch, filter, pagination.limit]);
+  }, [dispatch, queryParams]);
   useEffect(() => {
     getData();
   }, [getData]);
@@ -57,7 +61,7 @@ export default function DataTablePage(props: DataTablePageProps) {
         <Typography variant="h5" p={2}>
           Payroll Transactions List
         </Typography>
-        <FilterComponent />
+        <FilterComponent query={queryParams} onChange={handleFiltersChange} />
         <TableComponent loading={loading} />
 
         <Box
@@ -74,8 +78,8 @@ export default function DataTablePage(props: DataTablePageProps) {
             count={Math.ceil(pagination.total / pagination.limit)}
             color="primary"
             onChange={(e, page) =>
-              setPagination({
-                ...pagination,
+              setQuery({
+                ...queryParams,
                 page,
               })
             }

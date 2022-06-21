@@ -10,6 +10,7 @@ import { RootState } from "../redux/reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUserInfo } from "../modules/auth/redux/authReducer";
 import { FormattedMessage } from "react-intl";
+import { ACCESS_TOKEN_KEY } from "utils/constants";
 
 export interface HeaderComponentProps {}
 
@@ -40,7 +41,7 @@ export default function HeaderComponent(props: HeaderComponentProps) {
               user?.id
                 ? () => {
                     dispatch(clearUserInfo());
-                    localStorage.removeItem("user");
+                    localStorage.removeItem(ACCESS_TOKEN_KEY);
                   }
                 : () => navigate("/login")
             }

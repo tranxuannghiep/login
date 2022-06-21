@@ -23,191 +23,105 @@ const checkTimeTo = (
     : true;
 };
 
-const getAll = (page = 1, limit = 10, filter: FilterTableState = {}) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(
-        FAKE_DATA.payrolls
-          .filter((val) => {
-            if (filter.status) {
-              if (filter.status === "received") {
-                return (
-                  val.received &&
-                  (filter.search
-                    ? val.subpayroll_ids
-                        .toString()
-                        .toLowerCase()
-                        .includes(filter.search.toLowerCase()) &&
-                      checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                      checkTimeTo(val.date_confirmed, filter.timeTo)
-                    : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                      checkTimeTo(val.date_confirmed, filter.timeTo))
-                );
-              } else if (filter.status === "processing") {
-                return (
-                  (val.approved || val.matched) &&
-                  !val.received &&
-                  (filter.search
-                    ? val.subpayroll_ids
-                        .toString()
-                        .toLowerCase()
-                        .includes(filter.search.toLowerCase()) &&
-                      checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                      checkTimeTo(val.date_confirmed, filter.timeTo)
-                    : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                      checkTimeTo(val.date_confirmed, filter.timeTo))
-                );
-              } else if (filter.status === "fulfilled") {
-                return (
-                  val.fulfilled &&
-                  !val.received &&
-                  (filter.search
-                    ? val.subpayroll_ids
-                        .toString()
-                        .toLowerCase()
-                        .includes(filter.search.toLowerCase()) &&
-                      checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                      checkTimeTo(val.date_confirmed, filter.timeTo)
-                    : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                      checkTimeTo(val.date_confirmed, filter.timeTo))
-                );
-              } else if (filter.status === "canceled") {
-                return (
-                  val.canceled &&
-                  !val.received &&
-                  (filter.search
-                    ? val.subpayroll_ids
-                        .toString()
-                        .toLowerCase()
-                        .includes(filter.search.toLowerCase()) &&
-                      checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                      checkTimeTo(val.date_confirmed, filter.timeTo)
-                    : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                      checkTimeTo(val.date_confirmed, filter.timeTo))
-                );
-              }
-              return (
-                !val.received &&
-                !val.canceled &&
-                (filter.search
-                  ? val.subpayroll_ids
-                      .toString()
-                      .toLowerCase()
-                      .includes(filter.search.toLowerCase()) &&
-                    checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                    checkTimeTo(val.date_confirmed, filter.timeTo)
-                  : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                    checkTimeTo(val.date_confirmed, filter.timeTo))
-              );
-            } else {
-              return filter.search
-                ? val.subpayroll_ids
-                    .toString()
-                    .toLowerCase()
-                    .includes(filter.search.toLowerCase()) &&
-                    checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                    checkTimeTo(val.date_confirmed, filter.timeTo)
-                : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                    checkTimeTo(val.date_confirmed, filter.timeTo);
-            }
-          })
-          .slice((page - 1) * limit, page * limit)
+const getAll = (filter: FilterTableState) => {
+  const { page, limit } = filter;
+  const data = FAKE_DATA.payrolls.filter((val) => {
+    if (filter.status) {
+      if (filter.status === "received") {
+        return (
+          val.received &&
+          (filter.search
+            ? val.subpayroll_ids
+                .toString()
+                .toLowerCase()
+                .includes(filter.search.toLowerCase()) &&
+              checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
+              checkTimeTo(val.date_confirmed, filter.timeTo)
+            : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
+              checkTimeTo(val.date_confirmed, filter.timeTo))
+        );
+      } else if (filter.status === "processing") {
+        return (
+          (val.approved || val.matched) &&
+          !val.received &&
+          (filter.search
+            ? val.subpayroll_ids
+                .toString()
+                .toLowerCase()
+                .includes(filter.search.toLowerCase()) &&
+              checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
+              checkTimeTo(val.date_confirmed, filter.timeTo)
+            : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
+              checkTimeTo(val.date_confirmed, filter.timeTo))
+        );
+      } else if (filter.status === "fulfilled") {
+        return (
+          val.fulfilled &&
+          !val.received &&
+          (filter.search
+            ? val.subpayroll_ids
+                .toString()
+                .toLowerCase()
+                .includes(filter.search.toLowerCase()) &&
+              checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
+              checkTimeTo(val.date_confirmed, filter.timeTo)
+            : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
+              checkTimeTo(val.date_confirmed, filter.timeTo))
+        );
+      } else if (filter.status === "canceled") {
+        return (
+          val.canceled &&
+          !val.received &&
+          (filter.search
+            ? val.subpayroll_ids
+                .toString()
+                .toLowerCase()
+                .includes(filter.search.toLowerCase()) &&
+              checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
+              checkTimeTo(val.date_confirmed, filter.timeTo)
+            : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
+              checkTimeTo(val.date_confirmed, filter.timeTo))
+        );
+      }
+      return (
+        !val.received &&
+        !val.canceled &&
+        (filter.search
+          ? val.subpayroll_ids
+              .toString()
+              .toLowerCase()
+              .includes(filter.search.toLowerCase()) &&
+            checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
+            checkTimeTo(val.date_confirmed, filter.timeTo)
+          : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
+            checkTimeTo(val.date_confirmed, filter.timeTo))
       );
-    }, 500);
+    } else {
+      return filter.search
+        ? val.subpayroll_ids
+            .toString()
+            .toLowerCase()
+            .includes(filter.search.toLowerCase()) &&
+            checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
+            checkTimeTo(val.date_confirmed, filter.timeTo)
+        : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
+            checkTimeTo(val.date_confirmed, filter.timeTo);
+    }
   });
-};
-const getTotal = (filter: FilterTableState = {}) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(
-        FAKE_DATA.payrolls.filter((val) => {
-          if (filter.status) {
-            if (filter.status === "received") {
-              return (
-                val.received &&
-                (filter.search
-                  ? val.subpayroll_ids
-                      .toString()
-                      .toLowerCase()
-                      .includes(filter.search.toLowerCase()) &&
-                    checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                    checkTimeTo(val.date_confirmed, filter.timeTo)
-                  : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                    checkTimeTo(val.date_confirmed, filter.timeTo))
-              );
-            } else if (filter.status === "processing") {
-              return (
-                (val.approved || val.matched) &&
-                !val.received &&
-                (filter.search
-                  ? val.subpayroll_ids
-                      .toString()
-                      .toLowerCase()
-                      .includes(filter.search.toLowerCase()) &&
-                    checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                    checkTimeTo(val.date_confirmed, filter.timeTo)
-                  : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                    checkTimeTo(val.date_confirmed, filter.timeTo))
-              );
-            } else if (filter.status === "fulfilled") {
-              return (
-                val.fulfilled &&
-                !val.received &&
-                (filter.search
-                  ? val.subpayroll_ids
-                      .toString()
-                      .toLowerCase()
-                      .includes(filter.search.toLowerCase()) &&
-                    checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                    checkTimeTo(val.date_confirmed, filter.timeTo)
-                  : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                    checkTimeTo(val.date_confirmed, filter.timeTo))
-              );
-            } else if (filter.status === "canceled") {
-              return (
-                val.canceled &&
-                !val.received &&
-                (filter.search
-                  ? val.subpayroll_ids
-                      .toString()
-                      .toLowerCase()
-                      .includes(filter.search.toLowerCase()) &&
-                    checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                    checkTimeTo(val.date_confirmed, filter.timeTo)
-                  : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                    checkTimeTo(val.date_confirmed, filter.timeTo))
-              );
-            }
-            return (
-              !val.received &&
-              !val.canceled &&
-              (filter.search
-                ? val.subpayroll_ids
-                    .toString()
-                    .toLowerCase()
-                    .includes(filter.search.toLowerCase()) &&
-                  checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                  checkTimeTo(val.date_confirmed, filter.timeTo)
-                : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                  checkTimeTo(val.date_confirmed, filter.timeTo))
-            );
-          } else {
-            return filter.search
-              ? val.subpayroll_ids
-                  .toString()
-                  .toLowerCase()
-                  .includes(filter.search.toLowerCase()) &&
-                  checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                  checkTimeTo(val.date_confirmed, filter.timeTo)
-              : checkTimeFrom(val.date_confirmed, filter.timeFrom) &&
-                  checkTimeTo(val.date_confirmed, filter.timeTo);
-          }
-        }).length
-      );
-    }, 500);
-  });
-};
 
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        data: data.slice((page - 1) * limit, page * limit),
+        pagination: {
+          page: Math.ceil(data.length / limit) < page ? 1 : page,
+          limit,
+          total: data.length,
+        },
+      });
+    }, 500);
+  });
+};
 const getCurrency = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -221,4 +135,4 @@ const getCurrency = () => {
   });
 };
 
-export { getAll, getTotal, getCurrency };
+export { getAll, getCurrency };

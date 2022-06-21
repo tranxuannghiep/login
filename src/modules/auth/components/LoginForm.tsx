@@ -28,6 +28,7 @@ import PasswordFiled from "components/form-controls/PasswordFiled";
 import { RootState } from "redux/reducer";
 import { ROUTES } from "configs/routes";
 import { FormattedMessage } from "react-intl";
+import { ACCESS_TOKEN_KEY } from "utils/constants";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -92,9 +93,9 @@ export default function LoginForm(props: LoginFormProps) {
       setLoading(false);
       if (res?.code === RESPONSE_STATUS_SUCCESS) {
         dispatch(setUserInfo(res.data));
-        if (formValues.rememberMe)
-          localStorage.setItem("user", JSON.stringify(res.data));
-        else localStorage.removeItem("user");
+        if (formValues.rememberMe) {
+          localStorage.setItem(ACCESS_TOKEN_KEY, res.data.token);
+        } else localStorage.removeItem(ACCESS_TOKEN_KEY);
         navigate(ROUTES.home, { replace: true });
         return;
       }

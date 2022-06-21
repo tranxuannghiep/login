@@ -13,12 +13,8 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { makeStyles } from "@mui/styles";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import {
-  filterPayrolls,
-  FilterTableState,
-} from "modules/dataTable/redux/dataTableReducer";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { FilterTableState } from "modules/dataTable/redux/dataTableReducer";
+import { useEffect, useState } from "react";
 const moment = require("moment");
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -34,12 +30,20 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export interface FilterComponentProps {}
+export interface FilterComponentProps {
+  query: any;
+  onChange: Function;
+}
 
-export default function FilterComponent(props: FilterComponentProps) {
+export default function FilterComponent({
+  query,
+  onChange,
+}: FilterComponentProps) {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const [filters, setFilters] = useState<FilterTableState>({});
+  const [filters, setFilters] = useState<FilterTableState>(query);
+  useEffect(() => {
+    setFilters(query);
+  }, [query]);
   return (
     <Box className={classes.root}>
       <Box display="flex" alignItems="baseline">
@@ -136,7 +140,9 @@ export default function FilterComponent(props: FilterComponentProps) {
       <Box>
         <Button
           variant="outlined"
-          onClick={() => dispatch(filterPayrolls(filters))}
+          onClick={() => {
+            if (onChange) onChange(filters);
+          }}
         >
           Apply
         </Button>
@@ -144,8 +150,8 @@ export default function FilterComponent(props: FilterComponentProps) {
           variant="outlined"
           style={{ marginLeft: "10px" }}
           onClick={() => {
-            setFilters({});
-            dispatch(filterPayrolls({}));
+            setFilters({ page: 1, limit: 10 });
+            if (onChange) onChange({ page: 1, limit: 10 });
           }}
         >
           Clear

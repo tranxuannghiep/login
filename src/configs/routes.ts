@@ -4,4 +4,5 @@ export const ROUTES = {
   register: "/register",
   todo: "/todo",
   dataTable: "/data-table",
+  profile: "/profile",
 };
