@@ -13,6 +13,12 @@ export interface DataTablePageProps {}
 
 export default function DataTablePage(props: DataTablePageProps) {
   const dispatch = useDispatch();
+  const [pagination, setPagination] = useState<any>({
+    page: 1,
+    limit: 10,
+    total: 10,
+  });
+  const [loading, setLoading] = useState(false);
   const [, setQuery] = useQuery();
   const location = useLocation();
 
@@ -26,14 +32,10 @@ export default function DataTablePage(props: DataTablePageProps) {
     };
   }, [location.search]);
   const handleFiltersChange = (newFilters: any) => {
-    setQuery(newFilters);
+    setQuery({
+      ...newFilters,
+    });
   };
-  const [pagination, setPagination] = useState<any>({
-    page: 1,
-    limit: 10,
-    total: 10,
-  });
-  const [loading, setLoading] = useState(false);
   const getData = useCallback(async () => {
     setLoading(true);
     const [{ data, pagination }, currencies]: any[] = await Promise.all([
@@ -45,6 +47,7 @@ export default function DataTablePage(props: DataTablePageProps) {
     setPagination(pagination);
     setLoading(false);
   }, [dispatch, queryParams]);
+
   useEffect(() => {
     getData();
   }, [getData]);
@@ -64,28 +67,30 @@ export default function DataTablePage(props: DataTablePageProps) {
         <FilterComponent query={queryParams} onChange={handleFiltersChange} />
         <TableComponent loading={loading} />
 
-        <Box
-          padding="32px"
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Typography>
-            Showing <strong>{pagination.limit}</strong> from{" "}
-            <strong>{pagination.total}</strong> data
-          </Typography>
-          <Pagination
-            count={Math.ceil(pagination.total / pagination.limit)}
-            color="primary"
-            onChange={(e, page) =>
-              setQuery({
-                ...queryParams,
-                page,
-              })
-            }
-            page={pagination.page || 1}
-          />
-        </Box>
+        {Math.ceil(pagination.total / pagination.limit) >= queryParams.page && (
+          <Box
+            padding="32px"
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Typography>
+              Showing <strong>{pagination.limit}</strong> from{" "}
+              <strong>{pagination.total}</strong> data
+            </Typography>
+            <Pagination
+              count={Math.ceil(pagination.total / pagination.limit)}
+              color="primary"
+              onChange={(e, page) =>
+                setQuery({
+                  ...queryParams,
+                  page,
+                })
+              }
+              page={pagination.page || 1}
+            />
+          </Box>
+        )}
       </Container>
     </Box>
   );

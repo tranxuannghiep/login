@@ -141,7 +141,11 @@ export default function FilterComponent({
         <Button
           variant="outlined"
           onClick={() => {
-            if (onChange) onChange(filters);
+            if (onChange)
+              onChange({
+                ...filters,
+                page: 1,
+              });
           }}
         >
           Apply

@@ -114,7 +114,7 @@ const getAll = (filter: FilterTableState) => {
       resolve({
         data: data.slice((page - 1) * limit, page * limit),
         pagination: {
-          page: Math.ceil(data.length / limit) < page ? 1 : page,
+          page: page,
           limit,
           total: data.length,
         },
